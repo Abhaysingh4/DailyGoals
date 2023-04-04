@@ -1,16 +1,25 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import Task from './Task'
 
 
 const Home = () => {
-    const [tasks, setTasks] = useState([]);
+    const initialArr = localStorage.getItem("tasks") ? JSON.parse(localStorage.getItem("tasks")) : [];
+    const [tasks, setTasks] = useState(initialArr);
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const submitHandler = (e) => {
         e.preventDefault();
-        setTasks([...tasks,{title,description}])
+        setTasks([...tasks, { title, description }])
+    };
+    const deleteTask = (index) => {
+        const filteredArr = tasks.filter((val, i) => {
+            return i !== index;
+        });
+        setTasks(filteredArr);
     }
-
+useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+}, [tasks])
   return (
       <div className='container'>
           <h1>DAILY GOALS</h1>
@@ -20,7 +29,12 @@ const Home = () => {
               <button type='submit'>ADD</button>
           </form>
           {tasks.map((item,index) => (
-              <Task key={index} Title={item.title} Description={item.description } />
+              <Task key={index}
+                  Title={item.title}
+                  Description={item.description}
+                  deleteTask={deleteTask}
+                  index={index}
+              />
         ))}
     </div>
   )
