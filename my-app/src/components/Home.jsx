@@ -10,6 +10,8 @@ const Home = () => {
     const submitHandler = (e) => {
         e.preventDefault();
         setTasks([...tasks, { title, description }])
+        setTitle("");
+        setDescription("");
     };
     const deleteTask = (index) => {
         const filteredArr = tasks.filter((val, i) => {
